@@ -1,0 +1,33 @@
+version: '3'
+
+services:
+  node-app:
+    build: .
+    volumes:
+      - ./:/app:ro
+      - /app/node_modules
+    links:
+      - mongo
+      - redis
+    ports:
+      - 5000:5000
+    env_file:
+      - ./.env
+    depends_on:
+      - mongo
+      - redis
+  mongo:
+    image: mongo:5
+    ports:
+      - 27017:27017
+    volumes:
+      - mongo-db:/data/db
+  redis:
+    image: redis:6
+    ports:
+      - 6379:6379
+    volumes:
+      - redis-db:/data/redis
+volumes:
+  mongo-db:
+  redis-db:
