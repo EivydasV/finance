@@ -11,8 +11,9 @@ import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import Typography from '@mui/material/Typography'
+import NextLink from 'next/link'
 
-export default function SignInSide() {
+export default function RegisterSide() {
   const handleSubmit = (event) => {}
 
   return (
@@ -95,8 +96,10 @@ export default function SignInSide() {
                 </Link>
               </Grid>
               <Grid item>
-                <Link href='#' variant='body2'>
-                  {"Don't have an account? Sign Up"}
+                <Link variant='body2'>
+                  {/* <NextLink href='/register' passHref>
+                    {"Don't have an account? Sign Up"}
+                  </NextLink> */}
                 </Link>
               </Grid>
             </Grid>
