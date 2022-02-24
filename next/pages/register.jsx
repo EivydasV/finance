@@ -1,23 +1,21 @@
-import * as React from "react";
-import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
-import CssBaseline from "@mui/material/CssBaseline";
-import TextField from "@mui/material/TextField";
-
-import Link from "@mui/material/Link";
-import Paper from "@mui/material/Paper";
-import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import Typography from "@mui/material/Typography";
-import NextLink from "next/link";
-import { Formik, Field, Form } from "formik";
-import * as Yup from "yup";
+import Avatar from "@mui/material/Avatar"
+import Button from "@mui/material/Button"
+import CssBaseline from "@mui/material/CssBaseline"
+import TextField from "@mui/material/TextField"
+import Link from "@mui/material/Link"
+import Paper from "@mui/material/Paper"
+import Box from "@mui/material/Box"
+import Grid from "@mui/material/Grid"
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined"
+import Typography from "@mui/material/Typography"
+import NextLink from "next/link"
+import { Formik, Field, Form } from "formik"
+import * as Yup from "yup"
 
 export default function RegisterSide() {
   const handleSubmit = (values, actions) => {
-    console.log(values);
-  };
+    console.log(values)
+  }
 
   const RegisterSchema = Yup.object().shape({
     email: Yup.string().email().max(55).required(),
@@ -27,7 +25,7 @@ export default function RegisterSide() {
     passwordConfirmation: Yup.string()
       .required()
       .oneOf([Yup.ref("password"), null], "Passwords must match"),
-  });
+  })
   return (
     <Grid container component="main" sx={{ height: "100vh", marginTop: -4 }}>
       <CssBaseline />
@@ -142,7 +140,7 @@ export default function RegisterSide() {
                       Sign Up
                     </Button>
                   </Form>
-                );
+                )
               }}
             </Formik>
 
@@ -164,5 +162,5 @@ export default function RegisterSide() {
         </Box>
       </Grid>
     </Grid>
-  );
+  )
 }

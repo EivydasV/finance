@@ -1,36 +1,28 @@
-import * as React from 'react'
-import Button from '@mui/material/Button'
-import TextField from '@mui/material/TextField'
-import Dialog from '@mui/material/Dialog'
-import DialogActions from '@mui/material/DialogActions'
-import DialogContent from '@mui/material/DialogContent'
-import DialogTitle from '@mui/material/DialogTitle'
-import InputLabel from '@mui/material/InputLabel'
-import MenuItem from '@mui/material/MenuItem'
-import FormControl from '@mui/material/FormControl'
-import Select from '@mui/material/Select'
-import AddIcon from '@mui/icons-material/Add'
-import { Formik, Field, Form } from 'formik'
-import AdapterDateFns from '@mui/lab/AdapterDateFns'
-import LocalizationProvider from '@mui/lab/LocalizationProvider'
-import DesktopDatePicker from '@mui/lab/DesktopDatePicker'
-import * as Yup from 'yup'
+import { useState } from "react"
+import Button from "@mui/material/Button"
+import TextField from "@mui/material/TextField"
+import Dialog from "@mui/material/Dialog"
+import DialogActions from "@mui/material/DialogActions"
+import DialogContent from "@mui/material/DialogContent"
+import DialogTitle from "@mui/material/DialogTitle"
+import AddIcon from "@mui/icons-material/Add"
+import { Formik, Field, Form } from "formik"
+import LoadingButton from "@mui/lab/LoadingButton"
+import AdapterDateFns from "@mui/lab/AdapterDateFns"
+import LocalizationProvider from "@mui/lab/LocalizationProvider"
+import DesktopDatePicker from "@mui/lab/DesktopDatePicker"
+import Snackbar from "@mui/material/Snackbar"
+import Alert from "@mui/material/Alert"
+import * as Yup from "yup"
 
 export default function FormDialog() {
-  const [open, setOpen] = React.useState(false)
-  const [age, setAge] = React.useState('')
-  const [value, setValue] = React.useState(new Date())
+  const [open, setOpen] = useState(false)
+  const [value, setValue] = useState(new Date())
+  const [snackBar, setSnackBar] = useState(true)
+  const [loading, setLoading] = useState(false)
 
   const handleChange = (newValue) => {
     setValue(newValue)
-  }
-
-  const handleClickOpen = () => {
-    setOpen(true)
-  }
-
-  const handleClose = () => {
-    setOpen(false)
   }
 
   const handleSubmit = (values, actions) => {
@@ -44,12 +36,25 @@ export default function FormDialog() {
 
   return (
     <div>
+      <Snackbar
+        open={snackBar}
+        autoHideDuration={3000}
+        anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+      >
+        <Alert
+          onClose={() => setSnackBar(false)}
+          severity="success"
+          sx={{ width: "100%" }}
+        >
+          This is a success message!
+        </Alert>
+      </Snackbar>
       <Button
-        size='large'
-        variant='outlined'
-        color='success'
+        size="large"
+        variant="outlined"
+        color="success"
         endIcon={<AddIcon />}
-        onClick={handleClickOpen}
+        onClick={() => setOpen(true)}
       >
         Create Income
       </Button>
@@ -59,7 +64,7 @@ export default function FormDialog() {
         fullWidth
         PaperProps={{
           style: {
-            background: '#006064',
+            background: "#006064",
           },
         }}
       >
@@ -79,47 +84,51 @@ export default function FormDialog() {
                       error={touched.amount && !!errors.amount}
                       helperText={touched.amount && errors.amount}
                       as={TextField}
-                      margin='dense'
-                      label='Amount'
-                      name='amount'
+                      margin="dense"
+                      label="Amount"
+                      name="amount"
                       fullWidth
-                      type='number'
-                      variant='standard'
+                      type="number"
+                      variant="standard"
                     />
                     <LocalizationProvider dateAdapter={AdapterDateFns}>
                       <DesktopDatePicker
-                        label='Date'
+                        label="Date"
                         value={value}
                         onChange={(value) => {
                           handleChange(value)
-                          setFieldValue('date', value.toISOString())
+                          setFieldValue("date", value.toISOString())
                         }}
                         renderInput={(params) => (
                           <Field
                             helperText={touched.date && errors.date}
                             as={TextField}
                             {...params}
-                            variant='standard'
+                            variant="standard"
                             fullWidth
-                            name='date'
-                            margin='dense'
+                            name="date"
+                            margin="dense"
                           />
                         )}
                       />
                     </LocalizationProvider>
                   </DialogContent>
                   <DialogActions>
-                    <Button onClick={handleClose} color='secondary'>
+                    <Button
+                      onClick={() => setOpen(false)}
+                      color="secondary"
+                      loading
+                    >
                       Cancel
                     </Button>
-                    <Button
+                    <LoadingButton
                       // onClick={handleClose}
-                      variant='contained'
+                      variant="contained"
                       disableElevation
-                      type='submit'
+                      type="submit"
                     >
                       Submit
-                    </Button>
+                    </LoadingButton>
                   </DialogActions>
                 </Form>
               </>

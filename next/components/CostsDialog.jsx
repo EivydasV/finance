@@ -1,38 +1,42 @@
-import * as React from 'react'
-import Button from '@mui/material/Button'
-import TextField from '@mui/material/TextField'
-import Dialog from '@mui/material/Dialog'
-import DialogActions from '@mui/material/DialogActions'
-import DialogContent from '@mui/material/DialogContent'
-import DialogTitle from '@mui/material/DialogTitle'
-import InputLabel from '@mui/material/InputLabel'
-import MenuItem from '@mui/material/MenuItem'
-import FormControl from '@mui/material/FormControl'
-import Select from '@mui/material/Select'
-import RemoveIcon from '@mui/icons-material/Remove'
-import { Formik, Field, Form } from 'formik'
-import AdapterDateFns from '@mui/lab/AdapterDateFns'
-import LocalizationProvider from '@mui/lab/LocalizationProvider'
-import DesktopDatePicker from '@mui/lab/DesktopDatePicker'
-import FormHelperText from '@mui/material/FormHelperText'
-import * as Yup from 'yup'
+import { useState } from "react"
+import Button from "@mui/material/Button"
+import TextField from "@mui/material/TextField"
+import Dialog from "@mui/material/Dialog"
+import DialogActions from "@mui/material/DialogActions"
+import DialogContent from "@mui/material/DialogContent"
+import DialogTitle from "@mui/material/DialogTitle"
+import InputLabel from "@mui/material/InputLabel"
+import MenuItem from "@mui/material/MenuItem"
+import FormControl from "@mui/material/FormControl"
+import Select from "@mui/material/Select"
+import RemoveIcon from "@mui/icons-material/Remove"
+import { Formik, Field, Form } from "formik"
+import AdapterDateFns from "@mui/lab/AdapterDateFns"
+import LocalizationProvider from "@mui/lab/LocalizationProvider"
+import DesktopDatePicker from "@mui/lab/DesktopDatePicker"
+import FormHelperText from "@mui/material/FormHelperText"
+import LoadingButton from "@mui/lab/LoadingButton"
+
+import * as Yup from "yup"
 
 const choices = [
-  'food',
-  'beauty',
-  'culture',
-  'health',
-  'gift',
-  'transportation',
-  'education',
-  'household',
-  'apparel',
-  'other',
+  "food",
+  "beauty",
+  "culture",
+  "health",
+  "gift",
+  "transportation",
+  "education",
+  "household",
+  "apparel",
+  "other",
 ]
+
 export default function FormDialog() {
-  const [open, setOpen] = React.useState(false)
-  const [costsType, setCostsType] = React.useState('')
-  const [value, setValue] = React.useState(new Date())
+  const [open, setOpen] = useState(false)
+  const [costsType, setCostsType] = useState("")
+  const [value, setValue] = useState(new Date())
+  const [loading, setLoading] = useState(false)
 
   const handleChange = (event) => {
     setCostsType(event.target.value)
@@ -50,9 +54,9 @@ export default function FormDialog() {
   return (
     <div>
       <Button
-        size='large'
-        variant='outlined'
-        color='error'
+        size="large"
+        variant="outlined"
+        color="error"
         endIcon={<RemoveIcon />}
         onClick={() => setOpen(true)}
       >
@@ -64,7 +68,7 @@ export default function FormDialog() {
         fullWidth
         PaperProps={{
           style: {
-            background: '#006064',
+            background: "#006064",
           },
         }}
       >
@@ -73,7 +77,7 @@ export default function FormDialog() {
           initialValues={{
             date: new Date().toISOString(),
             amount: 0,
-            costsType: '',
+            costsType: "",
           }}
           onSubmit={handleSubmit}
           validationSchema={createCostsSchema}
@@ -88,30 +92,30 @@ export default function FormDialog() {
                       error={touched.amount && !!errors.amount}
                       helperText={touched.amount && errors.amount}
                       as={TextField}
-                      margin='dense'
-                      label='Amount'
-                      name='amount'
+                      margin="dense"
+                      label="Amount"
+                      name="amount"
                       fullWidth
-                      type='number'
-                      variant='standard'
+                      type="number"
+                      variant="standard"
                     />
                     <FormControl
-                      variant='standard'
+                      variant="standard"
                       fullWidth
                       error={touched.costsType && !!errors.costsType}
                     >
-                      <InputLabel id='demo-simple-select-standard-label'>
+                      <InputLabel id="demo-simple-select-standard-label">
                         Costs Type
                       </InputLabel>
                       <Field
                         as={Select}
                         // value={costsType}
                         // onChange={(e) => setCostsType(e.target.value)}
-                        label='Costs Type'
-                        name='costsType'
-                        margin='dense'
+                        label="Costs Type"
+                        name="costsType"
+                        margin="dense"
                       >
-                        <MenuItem value=''>
+                        <MenuItem value="">
                           <em>None</em>
                         </MenuItem>
                         {choices.map((choice) => (
@@ -127,38 +131,38 @@ export default function FormDialog() {
 
                     <LocalizationProvider dateAdapter={AdapterDateFns}>
                       <DesktopDatePicker
-                        label='Date'
+                        label="Date"
                         value={value}
                         onChange={(value) => {
                           handleChange(value)
-                          setFieldValue('date', value.toISOString())
+                          setFieldValue("date", value.toISOString())
                         }}
                         renderInput={(params) => (
                           <Field
                             helperText={touched.date && errors.date}
                             as={TextField}
                             {...params}
-                            variant='standard'
-                            margin='dense'
+                            variant="standard"
+                            margin="dense"
                             fullWidth
-                            name='date'
+                            name="date"
                           />
                         )}
                       />
                     </LocalizationProvider>
                   </DialogContent>
                   <DialogActions>
-                    <Button onClick={() => setOpen(false)} color='secondary'>
+                    <Button onClick={() => setOpen(false)} color="secondary">
                       Cancel
                     </Button>
-                    <Button
+                    <LoadingButton
                       // onClick={handleClose}
-                      variant='contained'
+                      variant="contained"
                       disableElevation
-                      type='submit'
+                      type="submit"
                     >
                       Submit
-                    </Button>
+                    </LoadingButton>
                   </DialogActions>
                 </Form>
               </>
