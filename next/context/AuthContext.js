@@ -1,7 +1,8 @@
-import React, { useContext, useState, useEffect } from "react"
-import CircularProgress from "@mui/material/CircularProgress"
-import Box from "@mui/material/Box"
-import { Typography } from "@mui/material"
+import React, { useContext, useState, useEffect } from 'react'
+import CircularProgress from '@mui/material/CircularProgress'
+import Box from '@mui/material/Box'
+import { Typography } from '@mui/material'
+import axios from 'axios'
 
 const AuthContext = React.createContext()
 
@@ -12,12 +13,17 @@ export function useAuth() {
 export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState()
   const [loading, setLoading] = useState(false)
+  const [initialLoading, setInitialLoading] = useState(false)
 
   function signup(email, password) {
     // return auth.createUserWithEmailAndPassword(email, password)
   }
-
-  function login(email, password) {
+  function me() {
+    return axios.get('user/me')
+    // return auth.signInWithEmailAndPassword(email, password)
+  }
+  function login(values) {
+    return axios.post('user/login', values)
     // return auth.signInWithEmailAndPassword(email, password)
   }
 
@@ -42,24 +48,25 @@ export function AuthProvider({ children }) {
     login,
     signup,
     logout,
+    loading,
   }
 
   return (
     <AuthContext.Provider value={value}>
-      {loading ? (
+      {initialLoading ? (
         <Box
           sx={{
-            display: "flex",
-            height: "100vh",
-            justifyContent: "center",
-            alignItems: "center",
-            flexDirection: "column",
+            display: 'flex',
+            height: '100vh',
+            justifyContent: 'center',
+            alignItems: 'center',
+            flexDirection: 'column',
             gap: 5,
           }}
         >
           <Typography
-            variant="h2"
-            fontWeight="fontWeightMedium"
+            variant='h2'
+            fontWeight='fontWeightMedium'
             letterSpacing={2}
           >
             DEMO

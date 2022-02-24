@@ -1,19 +1,19 @@
-import { useState } from "react"
-import Button from "@mui/material/Button"
-import TextField from "@mui/material/TextField"
-import Dialog from "@mui/material/Dialog"
-import DialogActions from "@mui/material/DialogActions"
-import DialogContent from "@mui/material/DialogContent"
-import DialogTitle from "@mui/material/DialogTitle"
-import AddIcon from "@mui/icons-material/Add"
-import { Formik, Field, Form } from "formik"
-import LoadingButton from "@mui/lab/LoadingButton"
-import AdapterDateFns from "@mui/lab/AdapterDateFns"
-import LocalizationProvider from "@mui/lab/LocalizationProvider"
-import DesktopDatePicker from "@mui/lab/DesktopDatePicker"
-import Snackbar from "@mui/material/Snackbar"
-import Alert from "@mui/material/Alert"
-import * as Yup from "yup"
+import { useState } from 'react'
+import Button from '@mui/material/Button'
+import TextField from '@mui/material/TextField'
+import Dialog from '@mui/material/Dialog'
+import DialogActions from '@mui/material/DialogActions'
+import DialogContent from '@mui/material/DialogContent'
+import DialogTitle from '@mui/material/DialogTitle'
+import AddIcon from '@mui/icons-material/Add'
+import { Formik, Field, Form } from 'formik'
+import LoadingButton from '@mui/lab/LoadingButton'
+import AdapterDateFns from '@mui/lab/AdapterDateFns'
+import LocalizationProvider from '@mui/lab/LocalizationProvider'
+import DesktopDatePicker from '@mui/lab/DesktopDatePicker'
+import Snackbar from '@mui/material/Snackbar'
+import Alert from '@mui/material/Alert'
+import * as Yup from 'yup'
 
 export default function FormDialog() {
   const [open, setOpen] = useState(false)
@@ -39,20 +39,20 @@ export default function FormDialog() {
       <Snackbar
         open={snackBar}
         autoHideDuration={3000}
-        anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+        anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
         <Alert
           onClose={() => setSnackBar(false)}
-          severity="success"
-          sx={{ width: "100%" }}
+          severity='success'
+          sx={{ width: '100%' }}
         >
           This is a success message!
         </Alert>
       </Snackbar>
       <Button
-        size="large"
-        variant="outlined"
-        color="success"
+        size='large'
+        variant='outlined'
+        color='success'
         endIcon={<AddIcon />}
         onClick={() => setOpen(true)}
       >
@@ -64,7 +64,7 @@ export default function FormDialog() {
         fullWidth
         PaperProps={{
           style: {
-            background: "#006064",
+            background: '#006064',
           },
         }}
       >
@@ -84,30 +84,30 @@ export default function FormDialog() {
                       error={touched.amount && !!errors.amount}
                       helperText={touched.amount && errors.amount}
                       as={TextField}
-                      margin="dense"
-                      label="Amount"
-                      name="amount"
+                      margin='dense'
+                      label='Amount'
+                      name='amount'
                       fullWidth
-                      type="number"
-                      variant="standard"
+                      type='number'
+                      variant='standard'
                     />
                     <LocalizationProvider dateAdapter={AdapterDateFns}>
                       <DesktopDatePicker
-                        label="Date"
+                        label='Date'
                         value={value}
                         onChange={(value) => {
                           handleChange(value)
-                          setFieldValue("date", value.toISOString())
+                          setFieldValue('date', value.toISOString())
                         }}
                         renderInput={(params) => (
                           <Field
                             helperText={touched.date && errors.date}
                             as={TextField}
                             {...params}
-                            variant="standard"
+                            variant='standard'
                             fullWidth
-                            name="date"
-                            margin="dense"
+                            name='date'
+                            margin='dense'
                           />
                         )}
                       />
@@ -116,16 +116,16 @@ export default function FormDialog() {
                   <DialogActions>
                     <Button
                       onClick={() => setOpen(false)}
-                      color="secondary"
+                      color='secondary'
                       loading
                     >
                       Cancel
                     </Button>
                     <LoadingButton
                       // onClick={handleClose}
-                      variant="contained"
+                      variant='contained'
                       disableElevation
-                      type="submit"
+                      type='submit'
                     >
                       Submit
                     </LoadingButton>

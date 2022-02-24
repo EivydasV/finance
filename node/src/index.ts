@@ -30,7 +30,7 @@ process.on('uncaughtException', (error) => {
 const app = express()
 app.use(compression())
 app.use(helmet())
-app.use(cors({ credentials: true }))
+app.use(cors({ credentials: true, origin: 'http://localhost:3000' }))
 app.use(morgan('dev'))
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
