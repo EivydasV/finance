@@ -7,22 +7,23 @@ import Typography from '@mui/material/Typography'
 import Menu from '@mui/material/Menu'
 import MenuIcon from '@mui/icons-material/Menu'
 import Container from '@mui/material/Container'
-import Avatar from '@mui/material/Avatar'
 import Button from '@mui/material/Button'
-import Tooltip from '@mui/material/Tooltip'
 import MenuItem from '@mui/material/MenuItem'
 import Link from 'next/link'
-
+import LogoutIcon from '@mui/icons-material/Logout'
+import { useAuth } from '../context/AuthContext'
 const pages = [
-  { name: 'Home', route: '/' },
-  { name: 'Login', route: '/login' },
-  { name: 'Admin', route: '/admin' },
+  { name: 'Home', route: '/', auth: true },
+  { name: 'Login', route: '/login', auth: false },
+  { name: 'Admin', route: '/admin', auth: true },
 ]
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout']
 
 const ResponsiveAppBar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null)
   const [anchorElUser, setAnchorElUser] = React.useState(null)
+
+  const { loading, logout, currentUser } = useAuth()
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget)
@@ -82,13 +83,27 @@ const ResponsiveAppBar = () => {
                   display: { xs: 'block', md: 'none' },
                 }}
               >
-                {pages.map((page, index) => (
-                  <Link href={page.route} key={index} passHref>
-                    <MenuItem key={index} onClick={handleCloseNavMenu}>
-                      <Typography textAlign='center'>{page.name}</Typography>
-                    </MenuItem>
-                  </Link>
-                ))}
+                {pages.map((page, index) =>
+                  page.auth
+                    ? currentUser && (
+                        <Link href={page.route} key={index} passHref>
+                          <MenuItem key={index} onClick={handleCloseNavMenu}>
+                            <Typography textAlign='center'>
+                              {page.name}
+                            </Typography>
+                          </MenuItem>
+                        </Link>
+                      )
+                    : !currentUser && (
+                        <Link href={page.route} key={index} passHref>
+                          <MenuItem key={index} onClick={handleCloseNavMenu}>
+                            <Typography textAlign='center'>
+                              {page.name}
+                            </Typography>
+                          </MenuItem>
+                        </Link>
+                      )
+                )}
               </Menu>
             </Box>
             <Typography
@@ -99,18 +114,59 @@ const ResponsiveAppBar = () => {
             >
               LOGO
             </Typography>
+            {currentUser && (
+              <Button
+                onClick={logout}
+                sx={{
+                  my: 2,
+                  color: 'white',
+                  display: { xs: 'flex', md: 'none' },
+                }}
+                variant='contained'
+                color='error'
+                startIcon={<LogoutIcon />}
+              >
+                Logout
+              </Button>
+            )}
             <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-              {pages.map((page, index) => (
-                <Link href={page.route} key={index} passHref>
-                  <Button
-                    key={index}
-                    onClick={handleCloseNavMenu}
-                    sx={{ my: 2, color: 'white', display: 'block' }}
-                  >
-                    {page.name}
-                  </Button>
-                </Link>
-              ))}
+              {pages.map((page, index) =>
+                page.auth
+                  ? currentUser && (
+                      <Link href={page.route} key={index} passHref>
+                        <Button
+                          key={index}
+                          onClick={handleCloseNavMenu}
+                          sx={{ my: 2, color: 'white', display: 'block' }}
+                        >
+                          {page.name}
+                        </Button>
+                      </Link>
+                    )
+                  : !currentUser && (
+                      <Link href={page.route} key={index} passHref>
+                        <Button
+                          key={index}
+                          onClick={handleCloseNavMenu}
+                          sx={{ my: 2, color: 'white', display: 'block' }}
+                        >
+                          {page.name}
+                        </Button>
+                      </Link>
+                    )
+              )}
+              {currentUser && (
+                <Button
+                  // onClick={handleCloseNavMenu}
+                  sx={{ my: 2, color: 'white', ml: 'auto' }}
+                  variant='contained'
+                  color='error'
+                  onClick={logout}
+                  startIcon={<LogoutIcon />}
+                >
+                  Logout
+                </Button>
+              )}
             </Box>
           </Toolbar>
         </Container>

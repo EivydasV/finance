@@ -14,12 +14,13 @@ import DesktopDatePicker from '@mui/lab/DesktopDatePicker'
 import Snackbar from '@mui/material/Snackbar'
 import Alert from '@mui/material/Alert'
 import * as Yup from 'yup'
+import { useAuth } from '../context/AuthContext'
 
 export default function FormDialog() {
   const [open, setOpen] = useState(false)
   const [value, setValue] = useState(new Date())
   const [snackBar, setSnackBar] = useState(true)
-  const [loading, setLoading] = useState(false)
+  const { createPlusFinance, loading } = useAuth()
 
   const handleChange = (newValue) => {
     setValue(newValue)
@@ -114,11 +115,7 @@ export default function FormDialog() {
                     </LocalizationProvider>
                   </DialogContent>
                   <DialogActions>
-                    <Button
-                      onClick={() => setOpen(false)}
-                      color='secondary'
-                      loading
-                    >
+                    <Button onClick={() => setOpen(false)} color='secondary'>
                       Cancel
                     </Button>
                     <LoadingButton
@@ -126,6 +123,7 @@ export default function FormDialog() {
                       variant='contained'
                       disableElevation
                       type='submit'
+                      loading
                     >
                       Submit
                     </LoadingButton>

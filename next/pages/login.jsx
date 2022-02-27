@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Avatar from '@mui/material/Avatar'
 import Button from '@mui/material/Button'
 import CssBaseline from '@mui/material/CssBaseline'
@@ -14,25 +14,25 @@ import NextLink from 'next/link'
 import { Formik, Field, Form } from 'formik'
 import * as Yup from 'yup'
 import { useAuth } from '../context/AuthContext'
+import LoadingButton from '@mui/lab/LoadingButton'
+import { useRouter } from 'next/router'
 
 export default function SignInSide() {
-  const [error, setError] = useState(null)
-  const { login } = useAuth()
+  const { login, loading, error, currentUser } = useAuth()
+  const router = useRouter()
+  console.log(currentUser)
+
   const LoginSchema = Yup.object().shape({
     email: Yup.string().email().required('Required'),
     password: Yup.string().required('Required'),
   })
 
-  const handleSubmit = async (values, actions) => {
-    try {
-      const res = await login(values)
-      setError(null)
-      console.log(res)
-    } catch (e) {
-      setError(e.response.data.message)
-    }
+  const handleSubmit = (values, actions) => {
+    login(values)
   }
-
+  useEffect(() => {
+    if (currentUser) return router.replace('/')
+  }, [currentUser])
   return (
     <Grid container component='main' sx={{ height: '100vh', marginTop: -4 }}>
       <CssBaseline />
@@ -98,15 +98,20 @@ export default function SignInSide() {
                       label='Password'
                       type='password'
                     />
-                    {error && <Alert severity='error'>{error}</Alert>}
-                    <Button
+                    {error && (
+                      <Alert severity='error'>
+                        {error.response.data.message}
+                      </Alert>
+                    )}
+                    <LoadingButton
+                      loading={loading}
                       type='submit'
                       fullWidth
                       variant='contained'
                       sx={{ mt: 3, mb: 2 }}
                     >
                       Sign In
-                    </Button>
+                    </LoadingButton>
                   </Form>
                 )
               }}

@@ -52,7 +52,7 @@ router.post(
 
 //ROUTES ONLY FOR AUTH
 router.use(requireUser)
-router.delete('/logout', logout)
+router.post('/logout', logout)
 
 //ROUTES ONLY FOR USER
 router.use(requireRoles(Roles.USER))
