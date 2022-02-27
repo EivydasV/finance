@@ -33,7 +33,9 @@ export const createUserHandler: RequestHandler<
     lastName,
     password,
   })
-  return res.sendStatus(201)
+  return res
+    .status(201)
+    .json({ message: 'User successfully created, now you can login' })
 }
 export const forgotPasswordHandler: RequestHandler<
   {},
