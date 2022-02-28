@@ -5,6 +5,7 @@ import PieChart from '../components/PieChart'
 import { Container, Box } from '@mui/material'
 import { useRouter } from 'next/router'
 import { useAuth } from '../context/AuthContext'
+import SelectByDate from '../components/SelectByDate'
 
 export default function Home() {
   const { currentUser } = useAuth()
@@ -16,7 +17,7 @@ export default function Home() {
   return (
     <>
       <Container>
-        <Box marginBottom={5}>
+        <Box>
           <Container
             sx={{
               display: 'flex',
@@ -29,6 +30,9 @@ export default function Home() {
             <CostsDialog />
             <IncomeDialog />
           </Container>
+          <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
+            <SelectByDate />
+          </Box>
           <PieChart />
         </Box>
       </Container>

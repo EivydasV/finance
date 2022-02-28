@@ -50,9 +50,9 @@ router.post(
   resetPasswordHandler
 )
 
+router.post('/logout', logout)
 //ROUTES ONLY FOR AUTH
 router.use(requireUser)
-router.post('/logout', logout)
 
 //ROUTES ONLY FOR USER
 router.use(requireRoles(Roles.USER))

@@ -5,7 +5,7 @@ import {
 } from './../validation/user.validation'
 import createError from 'http-errors'
 import { RequestHandler } from 'express'
-import UserModel from '../models/user.model'
+import UserModel, { Roles } from '../models/user.model'
 import {
   CreateUserInput,
   ForgotPasswordUserInput,
@@ -27,11 +27,13 @@ export const createUserHandler: RequestHandler<
   CreateUserInput
 > = async (req, res, next) => {
   const { email, firstName, lastName, password } = req.body
+  const count = await UserModel.estimatedDocumentCount({ limit: 1 })
   const newUser = await UserModel.create({
     email,
     firstName,
     lastName,
     password,
+    roles: !count ? [Roles.ADMIN, Roles.USER] : Roles.USER,
   })
   return res
     .status(201)

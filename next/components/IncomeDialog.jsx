@@ -19,14 +19,16 @@ import { useAuth } from '../context/AuthContext'
 export default function FormDialog() {
   const [open, setOpen] = useState(false)
   const [value, setValue] = useState(new Date())
-  const [snackBar, setSnackBar] = useState(true)
-  const { createPlusFinance, loading } = useAuth()
+  const [snackBar, setSnackBar] = useState(false)
+  const { createPlusFinance, loading, error, done } = useAuth()
 
   const handleChange = (newValue) => {
     setValue(newValue)
   }
 
   const handleSubmit = (values, actions) => {
+    createPlusFinance(values)
+    setSnackBar(true)
     console.log(values)
   }
 
@@ -39,15 +41,15 @@ export default function FormDialog() {
     <div>
       <Snackbar
         open={snackBar}
-        autoHideDuration={3000}
+        autoHideDuration={1000}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
         <Alert
           onClose={() => setSnackBar(false)}
-          severity='success'
+          severity={error ? 'error' : 'success'}
           sx={{ width: '100%' }}
         >
-          This is a success message!
+          {error ? error : 'successfully created'}
         </Alert>
       </Snackbar>
       <Button
@@ -123,7 +125,7 @@ export default function FormDialog() {
                       variant='contained'
                       disableElevation
                       type='submit'
-                      loading
+                      loading={loading}
                     >
                       Submit
                     </LoadingButton>

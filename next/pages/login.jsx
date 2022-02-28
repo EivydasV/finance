@@ -20,6 +20,7 @@ import { useRouter } from 'next/router'
 export default function SignInSide() {
   const { login, loading, error, currentUser } = useAuth()
   const router = useRouter()
+  const { message } = router.query
   console.log(currentUser)
 
   const LoginSchema = Yup.object().shape({
@@ -69,6 +70,7 @@ export default function SignInSide() {
             Sign in
           </Typography>
           <Box sx={{ mt: 1, width: '100%' }}>
+            {message && <Alert severity='success'>{message}</Alert>}
             <Formik
               initialValues={{ email: '', password: '' }}
               validationSchema={LoginSchema}

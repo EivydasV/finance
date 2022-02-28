@@ -15,7 +15,7 @@ import { useAuth } from '../context/AuthContext'
 const pages = [
   { name: 'Home', route: '/', auth: true },
   { name: 'Login', route: '/login', auth: false },
-  { name: 'Admin', route: '/admin', auth: true },
+  { name: 'Admin', route: '/admin', auth: true, admin: true },
 ]
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout']
 
@@ -83,26 +83,27 @@ const ResponsiveAppBar = () => {
                   display: { xs: 'block', md: 'none' },
                 }}
               >
-                {pages.map((page, index) =>
-                  page.auth
-                    ? currentUser && (
-                        <Link href={page.route} key={index} passHref>
-                          <MenuItem key={index} onClick={handleCloseNavMenu}>
-                            <Typography textAlign='center'>
-                              {page.name}
-                            </Typography>
-                          </MenuItem>
-                        </Link>
-                      )
-                    : !currentUser && (
-                        <Link href={page.route} key={index} passHref>
-                          <MenuItem key={index} onClick={handleCloseNavMenu}>
-                            <Typography textAlign='center'>
-                              {page.name}
-                            </Typography>
-                          </MenuItem>
-                        </Link>
-                      )
+                {currentUser && (
+                  <Link href={'/'} passHref>
+                    <MenuItem onClick={handleCloseNavMenu}>
+                      <Typography textAlign='center'>Home</Typography>
+                    </MenuItem>
+                  </Link>
+                )}
+                {!currentUser && (
+                  <Link href={'/login'} passHref>
+                    <MenuItem onClick={handleCloseNavMenu}>
+                      <Typography textAlign='center'>Login</Typography>
+                    </MenuItem>
+                  </Link>
+                )}
+
+                {currentUser && currentUser?.user?.roles?.includes('admin') && (
+                  <Link href={'/admin'} passHref>
+                    <MenuItem onClick={handleCloseNavMenu}>
+                      <Typography textAlign='center'>Admin</Typography>
+                    </MenuItem>
+                  </Link>
                 )}
               </Menu>
             </Box>
@@ -130,30 +131,35 @@ const ResponsiveAppBar = () => {
               </Button>
             )}
             <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-              {pages.map((page, index) =>
-                page.auth
-                  ? currentUser && (
-                      <Link href={page.route} key={index} passHref>
-                        <Button
-                          key={index}
-                          onClick={handleCloseNavMenu}
-                          sx={{ my: 2, color: 'white', display: 'block' }}
-                        >
-                          {page.name}
-                        </Button>
-                      </Link>
-                    )
-                  : !currentUser && (
-                      <Link href={page.route} key={index} passHref>
-                        <Button
-                          key={index}
-                          onClick={handleCloseNavMenu}
-                          sx={{ my: 2, color: 'white', display: 'block' }}
-                        >
-                          {page.name}
-                        </Button>
-                      </Link>
-                    )
+              {currentUser && (
+                <Link href={'/'} passHref>
+                  <Button
+                    onClick={handleCloseNavMenu}
+                    sx={{ my: 2, color: 'white', display: 'block' }}
+                  >
+                    Home
+                  </Button>
+                </Link>
+              )}
+              {!currentUser && (
+                <Link href={'/login'} passHref>
+                  <Button
+                    onClick={handleCloseNavMenu}
+                    sx={{ my: 2, color: 'white', display: 'block' }}
+                  >
+                    Login
+                  </Button>
+                </Link>
+              )}
+              {currentUser && currentUser?.user?.roles?.includes('admin') && (
+                <Link href={'/admin'} passHref>
+                  <Button
+                    onClick={handleCloseNavMenu}
+                    sx={{ my: 2, color: 'white', display: 'block' }}
+                  >
+                    Admin
+                  </Button>
+                </Link>
               )}
               {currentUser && (
                 <Button

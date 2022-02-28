@@ -19,33 +19,27 @@ export const createPlusFinanceValidation = object({
   body: object({
     date: dateType,
     amount: amountType,
-    user: userType,
-  }).refine(
-    async (data) => await UserModel.findById(data.user).select('').lean(),
-    {
-      message: 'User with that id does not exists',
-      path: ['user'],
-    }
-  ),
+  }),
 })
 
 export const createMinusFinanceValidation = object({
   body: object({
     date: dateType,
     amount: amountType,
-    user: userType,
     costsType: costsType,
-  }).refine(
-    async (data) => await UserModel.findById(data.user).select('').lean(),
-    {
-      message: 'User with that id does not exists',
-      path: ['user'],
-    }
-  ),
+  }),
+})
+export const getMyFinanceValidation = object({
+  body: object({
+    date: dateType,
+  }),
 })
 
 export type CreatePlusFinanceInput = z.infer<
   typeof createPlusFinanceValidation
+>['body']
+export type GetMyFinanceValidation = z.infer<
+  typeof getMyFinanceValidation
 >['body']
 export type CreateMinusFinanceInput = z.infer<
   typeof createMinusFinanceValidation

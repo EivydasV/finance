@@ -17,6 +17,7 @@ export function AuthProvider({ children }) {
   const [error, setError] = useState(null)
   const [serverError, setServerError] = useState(false)
   const [validationError, setValidationError] = useState(null)
+  const [done, setDone] = useState(null)
 
   const router = useRouter()
   const me = async () => {
@@ -25,7 +26,7 @@ export function AuthProvider({ children }) {
       const res = await axios.get('user/me')
       setCurrentUser(res.data)
     } catch (e) {
-      if (e.response.status !== 401) {
+      if (e?.response?.status !== 401) {
         setServerError(true)
       }
     }
@@ -46,10 +47,10 @@ export function AuthProvider({ children }) {
 
   const login = async (values) => {
     setLoading(true)
-
     try {
       await axios.post('user/login', values)
       await me()
+      setError(null)
       router.replace(`/`)
     } catch (e) {
       setError(e)
@@ -57,19 +58,22 @@ export function AuthProvider({ children }) {
     setLoading(false)
   }
   const createPlusFinance = async (values) => {
+    setDone(false)
     setLoading(true)
     try {
       await axios.post('finance/create-plus', values)
-      router.replace(`/`)
+      setError(null)
     } catch (e) {
       setError(e)
     }
+    setDone(true)
     setLoading(false)
   }
   const createMinusFinance = async (values) => {
     setLoading(true)
     try {
       await axios.post('finance/create-minus', values)
+      setError(null)
     } catch (e) {
       setError(e)
     }
@@ -81,9 +85,11 @@ export function AuthProvider({ children }) {
     try {
       await axios.post('user/logout')
       setCurrentUser(null)
+      setError(null)
+
       router.replace('/login')
     } catch (e) {
-      if (e.response.status !== 401) {
+      if (e?.response?.status !== 401) {
         setError(e)
       }
     }
@@ -116,6 +122,7 @@ export function AuthProvider({ children }) {
     validationError,
     createPlusFinance,
     createMinusFinance,
+    done,
   }
   if (serverError) {
     return (
@@ -130,7 +137,7 @@ export function AuthProvider({ children }) {
         }}
       >
         <Typography
-          variant='h1'
+          variant='h2'
           fontWeight='fontWeightMedium'
           letterSpacing={2}
           color='error'
