@@ -13,11 +13,12 @@ export function useAuth() {
 export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState(null)
   const [loading, setLoading] = useState(false)
-  const [initialLoading, setInitialLoading] = useState(false)
+  const [initialLoading, setInitialLoading] = useState(true)
   const [error, setError] = useState(null)
   const [serverError, setServerError] = useState(false)
   const [validationError, setValidationError] = useState(null)
-  const [done, setDone] = useState(null)
+  const [finances, setFinances] = useState(null)
+  const [users, setUsers] = useState([])
 
   const router = useRouter()
   const me = async () => {
@@ -57,23 +58,46 @@ export function AuthProvider({ children }) {
     }
     setLoading(false)
   }
-  const createPlusFinance = async (values) => {
-    setDone(false)
+  const deleteUser = async (values) => {
     setLoading(true)
     try {
-      await axios.post('finance/create-plus', values)
+      await axios.delete('user', values)
       setError(null)
     } catch (e) {
       setError(e)
     }
-    setDone(true)
+    setLoading(false)
+  }
+  const createPlusFinance = async (values) => {
+    setLoading(true)
+    try {
+      await axios.post('finance/create-plus', values)
+      getMyFinance()
+
+      setError(null)
+    } catch (e) {
+      setError(e)
+    }
     setLoading(false)
   }
   const createMinusFinance = async (values) => {
     setLoading(true)
     try {
       await axios.post('finance/create-minus', values)
+      getMyFinance()
       setError(null)
+    } catch (e) {
+      setError(e)
+    }
+    setLoading(false)
+  }
+
+  const getMyFinance = async (values) => {
+    setLoading(true)
+    try {
+      const finances = await axios.post('finance', values)
+      setError(null)
+      setFinances(finances.data)
     } catch (e) {
       setError(e)
     }
@@ -95,6 +119,18 @@ export function AuthProvider({ children }) {
     }
     setLoading(false)
   }
+  // const getAllUsers = async () => {
+  //   setLoading(true)
+  //   try {
+  //     const res = await axios.get('user')
+  //     setUsers(res.data)
+  //     setError(null)
+  //   } catch (e) {
+  //     setUsers(null)
+  //     setError(e)
+  //   }
+  //   setLoading(false)
+  // }
 
   useEffect(() => {
     setInitialLoading(true)
@@ -106,12 +142,10 @@ export function AuthProvider({ children }) {
     if (error?.response?.status.toString().startsWith('5')) {
       setServerError(true)
     }
-    console.log({ error })
     if (error?.response?.status === 422) setValidationError(error.response.data)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [error])
 
-  console.log(currentUser)
   const value = {
     currentUser,
     login,
@@ -122,7 +156,11 @@ export function AuthProvider({ children }) {
     validationError,
     createPlusFinance,
     createMinusFinance,
-    done,
+    getMyFinance,
+    finances,
+    deleteUser,
+    // getAllUsers,
+    users,
   }
   if (serverError) {
     return (

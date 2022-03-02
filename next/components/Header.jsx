@@ -12,11 +12,7 @@ import MenuItem from '@mui/material/MenuItem'
 import Link from 'next/link'
 import LogoutIcon from '@mui/icons-material/Logout'
 import { useAuth } from '../context/AuthContext'
-const pages = [
-  { name: 'Home', route: '/', auth: true },
-  { name: 'Login', route: '/login', auth: false },
-  { name: 'Admin', route: '/admin', auth: true, admin: true },
-]
+
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout']
 
 const ResponsiveAppBar = () => {
@@ -98,13 +94,13 @@ const ResponsiveAppBar = () => {
                   </Link>
                 )}
 
-                {currentUser && currentUser?.user?.roles?.includes('admin') && (
+                {/* {currentUser && currentUser?.user?.roles?.includes('admin') && (
                   <Link href={'/admin'} passHref>
                     <MenuItem onClick={handleCloseNavMenu}>
                       <Typography textAlign='center'>Admin</Typography>
                     </MenuItem>
                   </Link>
-                )}
+                )} */}
               </Menu>
             </Box>
             <Typography
@@ -151,7 +147,7 @@ const ResponsiveAppBar = () => {
                   </Button>
                 </Link>
               )}
-              {currentUser && currentUser?.user?.roles?.includes('admin') && (
+              {/* {currentUser && currentUser?.user?.roles?.includes('admin') && (
                 <Link href={'/admin'} passHref>
                   <Button
                     onClick={handleCloseNavMenu}
@@ -160,7 +156,7 @@ const ResponsiveAppBar = () => {
                     Admin
                   </Button>
                 </Link>
-              )}
+              )} */}
               {currentUser && (
                 <Button
                   // onClick={handleCloseNavMenu}

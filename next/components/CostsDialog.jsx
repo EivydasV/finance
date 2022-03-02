@@ -40,17 +40,12 @@ export default function FormDialog() {
 
   const [open, setOpen] = useState(false)
   const [costsType, setCostsType] = useState('')
-  const [value, setValue] = useState(new Date())
 
-  const handleChange = (event) => {
-    setCostsType(event.target.value)
-  }
-
-  const handleSubmit = (values, actions) => {
-    createMinusFinance(values)
+  const handleSubmit = async (values, actions) => {
+    try {
+      await createMinusFinance(values)
+    } catch (e) {}
     setSnackBar(true)
-
-    console.log(values)
   }
   const createCostsSchema = Yup.object().shape({
     amount: Yup.number().min(1).required(),
@@ -102,8 +97,7 @@ export default function FormDialog() {
           onSubmit={handleSubmit}
           validationSchema={createCostsSchema}
         >
-          {({ touched, errors, setFieldValue }) => {
-            console.log(errors)
+          {({ touched, errors, setFieldValue, values }) => {
             return (
               <>
                 <Form>
@@ -152,9 +146,8 @@ export default function FormDialog() {
                     <LocalizationProvider dateAdapter={AdapterDateFns}>
                       <DesktopDatePicker
                         label='Date'
-                        value={value}
+                        value={values.date}
                         onChange={(value) => {
-                          handleChange(value)
                           setFieldValue('date', value.toISOString())
                         }}
                         renderInput={(params) => (

@@ -20,7 +20,7 @@ export default function FormDialog() {
   const [open, setOpen] = useState(false)
   const [value, setValue] = useState(new Date())
   const [snackBar, setSnackBar] = useState(false)
-  const { createPlusFinance, loading, error, done } = useAuth()
+  const { createPlusFinance, loading, error } = useAuth()
 
   const handleChange = (newValue) => {
     setValue(newValue)
@@ -29,7 +29,6 @@ export default function FormDialog() {
   const handleSubmit = (values, actions) => {
     createPlusFinance(values)
     setSnackBar(true)
-    console.log(values)
   }
 
   const createIncomeSchema = Yup.object().shape({
@@ -78,7 +77,6 @@ export default function FormDialog() {
           validationSchema={createIncomeSchema}
         >
           {({ touched, errors, setFieldValue }) => {
-            console.log(errors)
             return (
               <>
                 <Form>

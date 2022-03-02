@@ -20,8 +20,7 @@ export enum CostsType {
   APPAREL = 'apparel',
   OTHER = 'other',
 }
-@Plugins(mongoosePaginate)
-export class Finance extends PaginatedModel {
+export class Finance {
   @Prop({ required: true, enum: FinanceType })
   type!: FinanceType
 

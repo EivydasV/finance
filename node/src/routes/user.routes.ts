@@ -1,6 +1,7 @@
 import {
   addRoleHandler,
   removeRoleHandler,
+  removeUserHandler,
 } from './../controllers/user.controller'
 import express, { Router } from 'express'
 import CheckInCache from '../utils/checkInCacheForUser'
@@ -23,6 +24,7 @@ import {
   updateEmailUserValidation,
   addRoleUserValidation,
   removeRoleUserValidation,
+  removeUserValidation,
 } from '../validation/user.validation'
 import requireUser from '../middlewares/requireUser'
 import { login, logout, me } from '../controllers/auth.controller'
@@ -84,5 +86,6 @@ router.post(
   validateResource(removeRoleUserValidation),
   removeRoleHandler
 )
+router.delete('/', validateResource(removeUserValidation), removeUserHandler)
 
 export default router

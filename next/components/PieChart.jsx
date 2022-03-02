@@ -27,7 +27,9 @@ const options = {
     },
   },
 }
-export default function PieChart() {
+export default function PieChart({ finances }) {
+  if (!finances) return ''
+  console.log(finances.finances.map((fin) => fin._id))
   return (
     <>
       <Container
@@ -38,7 +40,24 @@ export default function PieChart() {
         }}
       >
         <Doughnut
-          data={data}
+          data={{
+            labels: finances.finances.map((fin) => fin._id),
+            datasets: [
+              {
+                label: 'Costs',
+                data: finances.finances.map((fin) => fin.amount),
+                backgroundColor: finances.finances.map((fin) => {
+                  const randomNum = () =>
+                    Math.floor(Math.random() * (235 - 52 + 1) + 52)
+
+                  const randomRGB = () =>
+                    `rgb(${randomNum()}, ${randomNum()}, ${randomNum()})`
+                  return randomRGB()
+                }),
+                hoverOffset: 4,
+              },
+            ],
+          }}
           options={{ ...options, offset: 15, maintainAspectRatio: false }}
           width={500}
           height={500}

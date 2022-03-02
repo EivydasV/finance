@@ -7,19 +7,23 @@ services:
       - ./:/app:ro
       - /app/node_modules
     links:
-      - mongo
+      - mongo-db
       - redis
     ports:
       - 5000:5000
     env_file:
       - ./.env
     depends_on:
-      - mongo
+      - mongo-db
       - redis
-  mongo:
+  mongo-db:
     image: mongo:5
+    restart: always
     ports:
       - 27017:27017
+    environment:
+      - MONGODB_USER=eivydas
+      - MONGODB_PASS=eivydas
     volumes:
       - mongo-db:/data/db
   redis:

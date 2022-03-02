@@ -21,7 +21,6 @@ export default function SignInSide() {
   const { login, loading, error, currentUser } = useAuth()
   const router = useRouter()
   const { message } = router.query
-  console.log(currentUser)
 
   const LoginSchema = Yup.object().shape({
     email: Yup.string().email().required('Required'),

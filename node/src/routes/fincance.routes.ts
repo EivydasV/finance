@@ -27,5 +27,5 @@ router.post(
   validateResource(createMinusFinanceValidation),
   createMinusFinanceHandler
 )
-router.route('/').get(getMyFinanceHandler)
+router.route('/').post(getMyFinanceHandler)
 export default router

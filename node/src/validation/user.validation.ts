@@ -131,9 +131,21 @@ export const addRoleUserValidation = object({
     role: nativeEnum(Roles),
   }),
 })
+export const removeUserValidation = object({
+  params: object({
+    id: string(),
+  }),
+})
+export const getAllUserValidation = object({
+  query: object({
+    page: string().optional(),
+  }),
+})
 export const removeRoleUserValidation = addRoleUserValidation
 
+export type GetAllUserInput = z.infer<typeof getAllUserValidation>['query']
 export type GetByIdUserInput = z.infer<typeof GetByIdUserValidation>['params']
+export type removeUserInput = z.infer<typeof removeUserValidation>['params']
 export type ResetPasswordUserInput = z.infer<typeof ResetPasswordUserValidation>
 export type CreateUserInput = z.infer<typeof createUserValidation>['body']
 export type LoginUserInput = z.infer<typeof loginUserValidation>['body']

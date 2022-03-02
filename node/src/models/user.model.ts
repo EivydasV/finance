@@ -7,6 +7,8 @@ import {
 } from '@typegoose/typegoose'
 import validator from 'validator'
 import argon2 from 'argon2'
+import FinanceModel from './finance.mode'
+import PaginatedModel from '../helpers/paginatedModel'
 @ModelOptions({
   schemaOptions: {
     timestamps: true,
@@ -36,7 +38,7 @@ export enum Roles {
     timestamps: true,
   },
 })
-export class User {
+export class User extends PaginatedModel {
   @Prop({
     lowercase: true,
     trim: true,

@@ -8,6 +8,7 @@ import { RequestHandler } from 'express'
 import createError from 'http-errors'
 import FinanceModel, { FinanceType } from '../models/finance.mode'
 import moment from 'moment'
+import mongoose from 'mongoose'
 
 export const createPlusFinanceHandler: RequestHandler<
   {},
@@ -50,19 +51,26 @@ export const getMyFinanceHandler: RequestHandler<
   GetMyFinanceValidation
 > = async (req, res, next) => {
   const date = moment(req.body.date || Date.now())
-  // db.collection.aggregate([{
-  //   $group :
-  //         {
-  //           _id : "$language",
-  //           totalSaleAmount: { $sum:  "$population" },
-  //           count: {$count: {}}
-  //         }
-  // }])
-  const myFinances = await FinanceModel.find({
-    user: res.locals.user._id,
-    date: { $gt: date.startOf('month'), $lt: date.endOf('month') },
-  })
-  if (myFinances) return next(new createError.NotFound())
+
+  console.log(date.endOf('month').toDate())
+
+  const myFinances = await FinanceModel.aggregate()
+    .match({
+      costsType: { $exists: true },
+      user: new mongoose.Types.ObjectId(res.locals.user._id),
+      date: {
+        $lte: date.endOf('month').toDate(),
+        $gte: date.startOf('month').toDate(),
+      },
+    })
+    .group({
+      _id: '$costsType',
+      amount: { $sum: '$amount' },
+      count: { $count: {} },
+    })
+  console.log(myFinances)
+
+  // if (myFinances.length === 0) return next(new createError.NotFound())
 
   return res.status(200).json({ finances: myFinances })
 }

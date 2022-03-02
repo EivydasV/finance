@@ -1,5 +1,7 @@
 import {
   AddRoleUserInput,
+  GetAllUserInput,
+  removeUserInput,
   UpdateEmailUserInput,
   UpdatePasswordUserInput,
 } from './../validation/user.validation'
@@ -20,6 +22,7 @@ import sendEmail from '../utils/mailer'
 import redis from '../utils/redis'
 import redisGetObject from '../utils/redisGetObject'
 import { RedisUser } from '../types/redisTypes'
+import FinanceModel from '../models/finance.mode'
 
 export const createUserHandler: RequestHandler<
   {},
@@ -150,8 +153,16 @@ export const updateEmailHandler: RequestHandler<
   return res.status(200).json({ message: 'Email successfully updated' })
 }
 
-export const getAllUsersHandler: RequestHandler = async (req, res, next) => {
-  const users = await UserModel.find({}).lean()
+export const getAllUsersHandler: RequestHandler<
+  {},
+  {},
+  {},
+  GetAllUserInput
+> = async (req, res, next) => {
+  const users = await UserModel.paginate(
+    {},
+    { lean: true, page: Number(req.query.page) ?? 1 }
+  )
   if (!users) return next(new createError.NotFound('Users not found'))
 
   return res.status(200).json({ users })
@@ -186,4 +197,17 @@ export const removeRoleHandler: RequestHandler<
   return res
     .status(200)
     .json({ message: `Role ${req.body.role} successfully removed` })
+}
+export const removeUserHandler: RequestHandler<removeUserInput> = async (
+  req,
+  res,
+  next
+) => {
+  if (req.params.id === res.locals.user._id)
+    return next(new createError.Forbidden('You cannot delete yourself'))
+  await FinanceModel.findByIdAndDelete(req.params.id)
+  const user = await UserModel.findByIdAndDelete(req.params.id).lean()
+  if (!user) return next(new createError.NotFound('User not found'))
+  await redis.del(`user:${user._id}`)
+  return res.status(200).json({ message: `User deleted` })
 }
